@@ -18,11 +18,12 @@ cd ..
 # Deploy to server
 echo "📤 Deploying to server at ${SERVER_IP}..."
 
-# Check if rsync is available
-if command -v rsync &> /dev/null; then
+# Check if rsync is available on the remote server
+if ssh ec2-user@${SERVER_IP} "command -v rsync" &> /dev/null; then
+    echo "Using rsync for deployment..."
     rsync -avz --delete dist/ ec2-user@${SERVER_IP}:/var/www/html/
 else
-    echo "rsync not found, using scp instead..."
+    echo "rsync not found on remote server, using alternative method..."
     # Create a temporary tar file
     tar -czf dist.tar.gz -C dist .
     # Copy the tar file to the server
