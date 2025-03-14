@@ -12,6 +12,9 @@ fs.ensureDirSync('dist');
 // Build function
 async function build() {
     console.log('Building site...');
+    // Make sure dist directory exists
+    await fs.ensureDir('dist');
+    // Copy files with overwrite option
     await fs.copy('src', 'dist', { overwrite: true });
     console.log('Build complete!');
 }
