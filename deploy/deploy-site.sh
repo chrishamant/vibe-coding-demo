@@ -17,7 +17,21 @@ cd ..
 
 # Deploy to server
 echo "📤 Deploying to server at ${SERVER_IP}..."
-rsync -avz --delete dist/ ec2-user@${SERVER_IP}:/var/www/html/
+
+# Check if rsync is available
+if command -v rsync &> /dev/null; then
+    rsync -avz --delete dist/ ec2-user@${SERVER_IP}:/var/www/html/
+else
+    echo "rsync not found, using scp instead..."
+    # Create a temporary tar file
+    tar -czf dist.tar.gz -C dist .
+    # Copy the tar file to the server
+    scp dist.tar.gz ec2-user@${SERVER_IP}:~
+    # Extract the tar file on the server
+    ssh ec2-user@${SERVER_IP} "sudo rm -rf /var/www/html/* && sudo tar -xzf ~/dist.tar.gz -C /var/www/html && rm ~/dist.tar.gz"
+    # Remove the local tar file
+    rm dist.tar.gz
+fi
 
 echo "✅ Deployment complete!"
 echo "🌐 Your site should be accessible at:"
