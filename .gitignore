@@ -15,3 +15,6 @@ deploy/*.tfplan
 
 # AWS
 .aws/
+
+# Explicitly NOT ignored (should be committed)
+# package-lock.json
