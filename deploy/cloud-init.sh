@@ -49,14 +49,17 @@ cat > /usr/local/bin/setup-ssl.sh << 'SSLSCRIPT'
 #!/bin/bash
 
 # This script should be run after the DNS is properly set up
-# Usage: setup-ssl.sh yourdomain.com
+# Usage: setup-ssl.sh yourdomain.com (or no args to use the default domain)
+
+# Default domain from Terraform
+DEFAULT_DOMAIN="vibe-coding.bat.mn"
 
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 yourdomain.com"
-    exit 1
+    DOMAIN=$DEFAULT_DOMAIN
+    echo "Using default domain: $DOMAIN"
+else
+    DOMAIN=$1
 fi
-
-DOMAIN=$1
 
 # Update the nginx config to include the domain name
 sed -i "s/server_name _;/server_name $DOMAIN;/" /etc/nginx/conf.d/static-site.conf

@@ -17,7 +17,7 @@ variable "ssh_allowed_cidr" {
 }
 
 variable "domain_name" {
-  description = "Domain name for the static site (optional)"
+  description = "Domain name for the static site"
   type        = string
-  default     = ""
+  default     = "vibe-coding.bat.mn"
 }

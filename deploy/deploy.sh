@@ -1,7 +1,13 @@
 #!/bin/bash
 
+# Check for AWS profile
+if [ -z "$AWS_PROFILE" ]; then
+  echo "AWS_PROFILE is not set. Setting to 'milewide'"
+  export AWS_PROFILE=milewide
+fi
+
 # Build the static site
-echo "Building the static site..."
+echo "Building site with AWS_PROFILE=$AWS_PROFILE..."
 cd ..
 npm run build
 
@@ -32,9 +38,12 @@ echo "Deploying to EC2 instance at $EC2_IP..."
 echo "To manually deploy the files, run:"
 echo "rsync -avz --delete -e \"ssh -i /path/to/your/key.pem\" dist/ ec2-user@$EC2_IP:/var/www/html/"
 
+# Get domain name from tfvars or environment
+DOMAIN_NAME=$(cd deploy && terraform output -raw domain_name 2>/dev/null || echo "vibe-coding.bat.mn")
+
 # Display SSL setup instructions
 echo ""
-echo "After deploying your site and setting up DNS, set up SSL with:"
-echo "ssh -i /path/to/your/key.pem ec2-user@$EC2_IP 'sudo /usr/local/bin/setup-ssl.sh yourdomain.com'"
+echo "After deploying your site and setting up DNS for $DOMAIN_NAME, set up SSL with:"
+echo "ssh -i /path/to/your/key.pem ec2-user@$EC2_IP 'sudo /usr/local/bin/setup-ssl.sh $DOMAIN_NAME'"
 
 echo "Deployment instructions complete."

@@ -1,3 +1,17 @@
 .aider*
 node_modules/
 dist/
+
+# Terraform
+deploy/.terraform/
+deploy/.terraform.lock.hcl
+deploy/terraform.tfvars
+deploy/*.tfstate
+deploy/*.tfstate.backup
+deploy/*.tfplan
+
+# direnv
+.envrc.local
+
+# AWS
+.aws/

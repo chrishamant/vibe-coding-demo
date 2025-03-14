@@ -77,8 +77,8 @@ resource "aws_instance" "web_server" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.web_server.id]
   
-  # User data script from external file
-  user_data = file("${path.module}/cloud-init.sh")
+  # User data script with domain name replacement
+  user_data = replace(file("${path.module}/cloud-init.sh"), "vibe-coding.bat.mn", var.domain_name)
 
   tags = {
     Name = "static-site-web-server"

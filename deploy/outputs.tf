@@ -18,7 +18,12 @@ output "deployment_instructions" {
   description = "Command to deploy the static site to the EC2 instance"
 }
 
+output "domain_name" {
+  value       = var.domain_name
+  description = "The domain name for the static site"
+}
+
 output "ssl_setup_instructions" {
-  value       = "After deploying your site and setting up DNS, run: ssh ec2-user@${aws_instance.web_server.public_ip} 'sudo /usr/local/bin/setup-ssl.sh yourdomain.com'"
+  value       = "After deploying your site and setting up DNS for ${var.domain_name}, run: ssh ec2-user@${aws_instance.web_server.public_ip} 'sudo /usr/local/bin/setup-ssl.sh ${var.domain_name}'"
   description = "Instructions for setting up SSL with Let's Encrypt"
 }
