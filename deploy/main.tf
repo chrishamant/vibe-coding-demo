@@ -71,11 +71,18 @@ resource "aws_security_group" "web_server" {
   }
 }
 
+# Create AWS key pair from the provided public key
+resource "aws_key_pair" "deployer" {
+  key_name   = "deployer-key"
+  public_key = var.public_key
+}
+
 # EC2 Instance
 resource "aws_instance" "web_server" {
   ami                    = data.aws_ami.amazon_linux_2023.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.web_server.id]
+  key_name               = aws_key_pair.deployer.key_name
   
   # User data script with domain name replacement
   user_data = replace(file("${path.module}/cloud-init.sh"), "vibe-coding.bat.mn", var.domain_name)
