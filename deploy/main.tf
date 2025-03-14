@@ -3,6 +3,32 @@ provider "aws" {
   region = var.aws_region
 }
 
+# Data source to get the latest Amazon Linux 2023 AMI
+data "aws_ami" "amazon_linux_2023" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-kernel-6.1-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+}
+
 # VPC and Security Group for the EC2 instance
 resource "aws_security_group" "web_server" {
   name        = "web-server-sg"
@@ -47,7 +73,7 @@ resource "aws_security_group" "web_server" {
 
 # EC2 Instance
 resource "aws_instance" "web_server" {
-  ami                    = var.ami_id
+  ami                    = data.aws_ami.amazon_linux_2023.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.web_server.id]
   
