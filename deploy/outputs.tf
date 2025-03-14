@@ -17,3 +17,8 @@ output "deployment_instructions" {
   value       = "Run: rsync -avz --delete -e \"ssh -i /path/to/your/key.pem\" ../dist/ ec2-user@${aws_instance.web_server.public_ip}:/var/www/html/"
   description = "Command to deploy the static site to the EC2 instance"
 }
+
+output "ssl_setup_instructions" {
+  value       = "After deploying your site and setting up DNS, run: ssh ec2-user@${aws_instance.web_server.public_ip} 'sudo /usr/local/bin/setup-ssl.sh yourdomain.com'"
+  description = "Instructions for setting up SSL with Let's Encrypt"
+}

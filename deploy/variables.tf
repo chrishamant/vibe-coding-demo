@@ -15,3 +15,9 @@ variable "ssh_allowed_cidr" {
   type        = string
   default     = "0.0.0.0/0"  # Consider restricting this in production
 }
+
+variable "domain_name" {
+  description = "Domain name for the static site (optional)"
+  type        = string
+  default     = ""
+}

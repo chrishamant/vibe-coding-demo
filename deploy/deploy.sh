@@ -26,9 +26,15 @@ echo "Deploying to EC2 instance at $EC2_IP..."
 # Replace 'ec2-user' with the appropriate username if different
 # Replace '/path/to/your/key.pem' with the path to your SSH key
 
+# Uncomment and modify the following line with your SSH key path
 # rsync -avz --delete -e "ssh -i /path/to/your/key.pem" dist/ ec2-user@$EC2_IP:/var/www/html/
 
 echo "To manually deploy the files, run:"
 echo "rsync -avz --delete -e \"ssh -i /path/to/your/key.pem\" dist/ ec2-user@$EC2_IP:/var/www/html/"
+
+# Display SSL setup instructions
+echo ""
+echo "After deploying your site and setting up DNS, set up SSL with:"
+echo "ssh -i /path/to/your/key.pem ec2-user@$EC2_IP 'sudo /usr/local/bin/setup-ssl.sh yourdomain.com'"
 
 echo "Deployment instructions complete."
