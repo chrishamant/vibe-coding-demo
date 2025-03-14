@@ -4,6 +4,7 @@
 - Make sure AWS CLI is installed and configured
 - Ensure you have an SSH key pair for EC2 access
 - Verify domain DNS settings for vibe-coding.bat.mn
+- Ensure package-lock.json is committed to git
 
 ## Deployment Steps
 
