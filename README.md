@@ -63,13 +63,28 @@ This will generate optimized files in the `dist` directory ready for deployment.
 
 ## Deployment
 
-The contents of the `dist` directory can be deployed to any static hosting service such as:
+The project includes a GitHub Actions workflow for continuous integration and deployment:
+
+1. When you push to the `main` branch, GitHub Actions will:
+   - Install dependencies
+   - Build the site
+   - Deploy to GitHub Pages automatically
+
+The contents of the `dist` directory can also be manually deployed to any static hosting service such as:
 
 - GitHub Pages
 - Netlify
 - Vercel
 - AWS S3
 - Firebase Hosting
+
+### GitHub Pages Setup
+
+To use the automatic GitHub Pages deployment:
+
+1. Ensure your repository has GitHub Pages enabled in Settings
+2. The workflow will deploy to the `gh-pages` branch automatically
+3. Set your GitHub Pages source to the `gh-pages` branch in repository settings
 
 ## License
 
