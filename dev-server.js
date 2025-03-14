@@ -12,11 +12,15 @@ fs.ensureDirSync('dist');
 // Build function
 async function build() {
     console.log('Building site...');
-    // Make sure dist directory exists
-    await fs.ensureDir('dist');
-    // Copy files with overwrite option
-    await fs.copy('src', 'dist', { overwrite: true });
-    console.log('Build complete!');
+    try {
+        // Make sure dist directory exists
+        await fs.ensureDir('dist');
+        // Copy files with overwrite option
+        await fs.copy('src', 'dist', { overwrite: true });
+        console.log('Build complete!');
+    } catch (err) {
+        console.error('Build error:', err.message);
+    }
 }
 
 // Initial build
@@ -30,17 +34,26 @@ const watcher = chokidar.watch('src', {
 
 // Watch for file changes
 watcher
-    .on('change', path => {
-        console.log(`File ${path} has been changed`);
+    .on('change', filePath => {
+        console.log(`File ${filePath} has been changed`);
         build();
     })
-    .on('add', path => {
-        console.log(`File ${path} has been added`);
+    .on('add', filePath => {
+        console.log(`File ${filePath} has been added`);
         build();
     })
-    .on('unlink', path => {
-        console.log(`File ${path} has been removed`);
-        build();
+    .on('unlink', filePath => {
+        console.log(`File ${filePath} has been removed`);
+        const destPath = filePath.replace(/^src/, 'dist');
+        // Only try to remove if it exists
+        fs.pathExists(destPath)
+            .then(exists => {
+                if (exists) {
+                    return fs.remove(destPath);
+                }
+            })
+            .then(() => build())
+            .catch(err => console.error('Error handling file removal:', err.message));
     });
 
 // Serve files from dist directory
